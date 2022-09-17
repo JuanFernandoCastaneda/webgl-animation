@@ -12,8 +12,9 @@ const urlDatos = 'https://raw.githubusercontent.com/JuanFernandoCastaneda/webgl-
 async function main() {
     var datosCrudos = await fetch(urlDatos).then(res => res.text());
     const row_size = 67;
-    const datos = new Array(row_size*100);
-    datosCrudos.split("\n").slice(0, 100)
+    const tiempo_maximo = 200;
+    const datos = new Array(row_size*tiempo_maximo);
+    datosCrudos.split("\n").slice(0, tiempo_maximo)
         .forEach((row, row_index) => row.split("\t")
         .forEach((cell, cell_index) => datos[row_index*row_size + cell_index] = cell))
     console.log(datos);
@@ -105,7 +106,7 @@ async function main() {
     // Setting the initial values for the matrices that will change.
     let worldMatrix = mat4.create();
 
-    let viewMatrix = mat4.lookAt(mat4.create(), [0, -2, 500], [0, 0, 0], [0, -1, 0]);
+    let viewMatrix = mat4.lookAt(mat4.create(), [0, 0, 15], [0, 0, 0], [0, -1, 0]);
     let projectionMatrix = mat4.perspective(mat4.create(), glmat.toRadian(45),
         canvas.width / canvas.height, 0.1, 1000.0);
 
@@ -175,18 +176,19 @@ async function main() {
         // R.Heel = 34, 35, 36 - L = 58, 59, 60
 
         const rKnee = new Person([1, 0, 0], [0, 0, 1], [0, 1, 0]);
-        rKnee.translate(datos[row_size*cuenta + 22], 
-            datos[row_size*cuenta + 23],
-            datos[row_size*cuenta + 24])
+        rKnee.translate(datos[row_size*cuenta + 22]/100, 
+            datos[row_size*cuenta + 23]/100,
+            datos[row_size*cuenta + 24]/100)
         rKnee.paint(gl);
 
         const lKnee = new Person([1, 0, 0], [0, 0, 1], [0, 1, 0]);
-        lKnee.translate(datos[row_size*cuenta + 46],
-            datos[row_size*cuenta + 47],
-            datos[row_size*cuenta + 48])
+        //console.log(datos[row_size*cuenta + 46])
+        lKnee.translate(datos[row_size*cuenta + 46]/100,
+            datos[row_size*cuenta + 47]/100,
+            datos[row_size*cuenta + 48]/100)
         lKnee.paint(gl);
 
-        if(cuenta == 100) {
+        if(cuenta == tiempo_maximo) {
             cuenta = 1;
             // Más cosas = 0.
         } else {
