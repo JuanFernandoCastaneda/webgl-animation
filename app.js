@@ -12,7 +12,7 @@ const urlDatos = 'https://raw.githubusercontent.com/JuanFernandoCastaneda/webgl-
 async function main() {
     var datosCrudos = await fetch(urlDatos).then(res => res.text());
     const row_size = 67;
-    const tiempo_maximo = 200;
+    const tiempo_maximo = 300;
     const datos = new Array(row_size*tiempo_maximo);
     datosCrudos.split("\n").slice(0, tiempo_maximo)
         .forEach((row, row_index) => row.split("\t")
@@ -106,7 +106,7 @@ async function main() {
     // Setting the initial values for the matrices that will change.
     let worldMatrix = mat4.create();
 
-    let viewMatrix = mat4.lookAt(mat4.create(), [0, 0, 15], [0, 0, 0], [0, -1, 0]);
+    let viewMatrix = mat4.lookAt(mat4.create(), [0, 0, 30], [0, 0, 0], [0, 1, 0]);
     let projectionMatrix = mat4.perspective(mat4.create(), glmat.toRadian(45),
         canvas.width / canvas.height, 0.1, 1000.0);
 
@@ -151,14 +151,17 @@ async function main() {
     let period = 0;
     let identityMatrix = mat4.create();
 
-    mat4.rotate(worldMatrix, identityMatrix, Math.PI, [1, -0.5, 0.5]);
+    mat4.rotate(worldMatrix, identityMatrix, Math.PI, [0, 1, 0]);
     
     var cuenta = 1;
+
+    const persona = new Person([1, 0, 0], [0, 0, 1], [0, 1, 0]);
 
     const loop = () => {
 
         // How much time the figure will take to rotate 360 degrees.
         period = performance.now() / 1000 / 40 * 2 * Math.PI;
+        //const persona = new Person([1, 0, 0], [0, 0, 1], [0, 1, 0]);
 
         // Operating the matrix to rotate in the period, by the y axis.
         // 1, 1, 0
@@ -171,26 +174,21 @@ async function main() {
         // Clearing both the color and the depth.
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-        // R.Knee = 22, 23, 24 - L = 46, 47, 48
-        // R.Ankle = 31, 32, 33 - L = 55, 56, 57
-        // R.Heel = 34, 35, 36 - L = 58, 59, 60
+        for(let i = 0; i < (row_size-1)/3; i++) {
+            persona.translate(
+                parseInt(datos[row_size*cuenta + 1 + i*3])/100,
+                parseInt(datos[row_size*cuenta + 1 + i*3 + 1])/100, 
+                parseInt(datos[row_size*cuenta + 1 + i*3 + 2])/100);
+            persona.paint(gl);
+            persona.translate(
+                -parseInt(datos[row_size*cuenta + 1 + i*3])/100,
+                -parseInt(datos[row_size*cuenta + 1 + i*3 + 1])/100, 
+                -parseInt(datos[row_size*cuenta + 1 + i*3 + 2])/100);
+        }
 
-        const rKnee = new Person([1, 0, 0], [0, 0, 1], [0, 1, 0]);
-        rKnee.translate(datos[row_size*cuenta + 22]/100, 
-            datos[row_size*cuenta + 23]/100,
-            datos[row_size*cuenta + 24]/100)
-        rKnee.paint(gl);
-
-        const lKnee = new Person([1, 0, 0], [0, 0, 1], [0, 1, 0]);
-        //console.log(datos[row_size*cuenta + 46])
-        lKnee.translate(datos[row_size*cuenta + 46]/100,
-            datos[row_size*cuenta + 47]/100,
-            datos[row_size*cuenta + 48]/100)
-        lKnee.paint(gl);
-
-        if(cuenta == tiempo_maximo) {
+        console.log(cuenta);
+        if(cuenta == tiempo_maximo-1) {
             cuenta = 1;
-            // Más cosas = 0.
         } else {
             cuenta += 1;
         }
