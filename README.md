@@ -12,7 +12,7 @@ https://jsfiddle.net/MightopitaGuy/gu50tbna/5/
 
 ## Lógica
 
-La forma en que funciona el programa es que se cargan los datos desde el link generado por Github para el archivo de caminar. Luego, se organizó este archivo en un arreglo, en que cada 67 posiciones se representaba una fila de la matriz. Como eventualmente me di cuenta de que cada 3 columnas era un punto X-Y-Z, pinté todos los punticos en cada momento de tiempo con un único objeto Person que trasladaba de un lado a otro.
+La forma en que funciona el programa es que se cargan los datos del archivo de caminar desde el link de Github. Luego de estar cargado, se convierte el archivo en un arreglo, en que cada 67 posiciones representan una fila de una matriz. Como eventualmente me di cuenta de que cada 3 columnas era un punto X-Y-Z, pinté todas las articulaciones en cada segundo con un único objeto Person que trasladaba de un lado a otro.
 
 Si se quiere modificar la cantidad de tiempo a mostrar de la animación, se debe modificar la variable "tiempo_máximo", que en este momento por defecto está puesta en 200.
 
