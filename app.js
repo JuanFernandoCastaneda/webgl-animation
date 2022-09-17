@@ -7,44 +7,16 @@ const mat4 = glMatrix.mat4;
 const glmat = glMatrix.glMatrix;
 // const {mat2, mat3, mat4} = glMatrix;
 
-var cakeRed = 1.0;
-var cakeGreen = 0.4;
-var cakeBlue = 0.72;
-var cakeX = 0;
-var cakeY = 0;
-var cakeZ = 0;
+const urlDatos = 'https://raw.githubusercontent.com/JuanFernandoCastaneda/webgl-animation/master/datos.txt'
 
-const redRanger = document.getElementById('redRange');
-redRanger.addEventListener('input', (event) => {
-    cakeRed = event.target.value
-});
-
-const greenRanger = document.getElementById('greenRange');
-greenRanger.addEventListener('input', (event) => {
-    cakeGreen = event.target.value
-});
-
-const blueRanger = document.getElementById('blueRange');
-blueRanger.addEventListener('input', (event) => {
-    cakeBlue = event.target.value
-});
-
-const xRanger = document.getElementById('xRange');
-xRanger.addEventListener('input', (event) => {
-    cakeX = parseInt(event.target.value)
-});
-
-const yRanger = document.getElementById('yRange');
-yRanger.addEventListener('input', (event) => {
-    cakeY = event.target.value
-});
-
-const zRanger = document.getElementById('zRange');
-zRanger.addEventListener('input', (event) => {
-    cakeZ = parseInt(event.target.value)
-});
-
-function main() {
+async function main() {
+    var datosCrudos = await fetch(urlDatos).then(res => res.text());
+    const row_size = 67;
+    const datos = new Array(row_size*100);
+    datosCrudos.split("\n").slice(0, 100)
+        .forEach((row, row_index) => row.split("\t")
+        .forEach((cell, cell_index) => datos[row_index*row_size + cell_index] = cell))
+    console.log(datos);
 
     if (!gl) { return; }
 
@@ -133,7 +105,7 @@ function main() {
     // Setting the initial values for the matrices that will change.
     let worldMatrix = mat4.create();
 
-    let viewMatrix = mat4.lookAt(mat4.create(), [0, -2, 8], [0, 0, 0], [0, -1, 0]);
+    let viewMatrix = mat4.lookAt(mat4.create(), [0, -2, 500], [0, 0, 0], [0, -1, 0]);
     let projectionMatrix = mat4.perspective(mat4.create(), glmat.toRadian(45),
         canvas.width / canvas.height, 0.1, 1000.0);
 
@@ -178,48 +150,9 @@ function main() {
     let period = 0;
     let identityMatrix = mat4.create();
 
-    const pisoBonito = new Cube([0.5, 0.8, 0]);
-    pisoBonito.scale(18, 0.001, 18);
-    pisoBonito.translate(0, -0.0005, 0);
-
-    const bicicleta = new Bycicle([1, 0, 0]);
-    bicicleta.scale(0.4, 0.4, 0.4);
-    bicicleta.rotate(0, Math.PI)
-    bicicleta.translate(-5.5, -0.001, -2)
-
-    const bicicleta2 = new Bycicle([0, 0, 1]);
-    bicicleta2.scale(0.4, 0.4, 0.4);
-    bicicleta2.rotate(0, Math.PI)
-    bicicleta2.rotate(1, Math.PI+0.3)
-    bicicleta2.translate(2, -0.001, 3)
-
-    const persona1 = new Person([1, 0, 0], [0.2, 0.4, 0.80], [0.90, 0.75, 0.65]);
-    persona1.rotate(0, Math.PI)
-    persona1.translate(2, -0.001, -3);
-
-    const persona2 = new Person([0, 0.1, 1], [0.2, 0.4, 0.80], [0.80, 0.52, 0.25])
-    persona2.rotate(0, Math.PI);
-    persona2.translate(1.5, -0.001, 2.5)
-
-    const mesa = new Table([0.54, 0.27, 0.074]);
-    mesa.scale(1.5, 0.6, 1.5);
-    mesa.rotate(0, Math.PI);
-    mesa.translate(0, -0.001, 0);
-
-    const nino = new Person([1, 1, 0], [0.2, 0.4, 0.80], [0.6, 0.42, 0.15]);
-    nino.rotate(0, Math.PI);
-    nino.scale(0.6, 0.6, 0.6);
-    nino.translate(-1, -0.001, 1);
-
-    const madre = new Person([1, 0.78, 0.8], [0.85, 0.45, 0.55], [0.80, 0.52, 0.25]);
-    madre.rotate(0, Math.PI);
-    madre.translate(-1, -0.001, 0)
-
-    const sombreroCumple = new BirthdayHat([1, 1, 0], [1, 0.4, 0.72]);
-    sombreroCumple.scale(0.2, 0.2, 0.2);
-
     mat4.rotate(worldMatrix, identityMatrix, Math.PI, [1, -0.5, 0.5]);
-
+    
+    var cuenta = 1;
 
     const loop = () => {
 
@@ -236,52 +169,29 @@ function main() {
         gl.clearColor(0.75, 0.85, 0.8, 1.0);
         // Clearing both the color and the depth.
         gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        
-        sombreroCumple.translate(0, 0.5, 0);
-        sombreroCumple.rotate(2, Math.PI/6);
-        sombreroCumple.translate(0, 0.5, 0);
-        sombreroCumple.paint(gl);
-        sombreroCumple.translate(0, -0.5, 0);
-        sombreroCumple.rotate(2, -Math.PI/6);
-        sombreroCumple.translate(0, -0.5, 0);
 
-        
-        pisoBonito.paint(gl);
+        // R.Knee = 22, 23, 24 - L = 46, 47, 48
+        // R.Ankle = 31, 32, 33 - L = 55, 56, 57
+        // R.Heel = 34, 35, 36 - L = 58, 59, 60
 
-        bicicleta.paint(gl);
-        bicicleta2.paint(gl);
+        const rKnee = new Person([1, 0, 0], [0, 0, 1], [0, 1, 0]);
+        rKnee.translate(datos[row_size*cuenta + 22], 
+            datos[row_size*cuenta + 23],
+            datos[row_size*cuenta + 24])
+        rKnee.paint(gl);
 
-        persona1.paint(gl);
+        const lKnee = new Person([1, 0, 0], [0, 0, 1], [0, 1, 0]);
+        lKnee.translate(datos[row_size*cuenta + 46],
+            datos[row_size*cuenta + 47],
+            datos[row_size*cuenta + 48])
+        lKnee.paint(gl);
 
-        persona1.translate(-5, 0, 3);
-        persona1.paint(gl);
-
-        persona1.translate(5, 0, -3);
-
-        persona2.paint(gl);
-
-        mesa.paint(gl);
-
-        const pastel = new Cake([cakeRed, cakeGreen, cakeBlue], [1, 0.72, 0.72]);
-        pastel.rotate(0, Math.PI);
-        // 0, -0.6001, 0
-        pastel.translate(cakeX, -cakeY-0.6001, cakeZ);
-
-        pastel.paint(gl);
-
-        nino.paint(gl);
-        sombreroCumple.rotate(2, Math.PI);
-        sombreroCumple.translate(-1, -0.6, 1);
-        sombreroCumple.paint(gl);
-        sombreroCumple.translate(1, 0.6, -1);
-        sombreroCumple.rotate(2, -Math.PI);
-        
-        madre.paint(gl);
-
-        // 1. How we are going to draw.
-        // 2. Quantity of elements.
-        // 3. Type of elements.
-        // 4. Skip.
+        if(cuenta == 100) {
+            cuenta = 1;
+            // Más cosas = 0.
+        } else {
+            cuenta += 1;
+        }
 
         // Every time the computer is ready to update it, it will.
         // If tab looses focus the function pauses execution.
