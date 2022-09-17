@@ -7,8 +7,14 @@ El método de envío que elegí para este proyecto fue dictado por la falta de t
 De todas maneras, aquí encuentra el Fiddle más actualizado del proyecto para su despliegue real (antes de las 12) 
 https://jsfiddle.net/MightopitaGuy/gu50tbna/1/ 
 
-ACTUALIZACIÓN: este es el link final, después de las 12 (específicamente 12:37 a.m.), pero que espero sea calificado :)
-https://jsfiddle.net/MightopitaGuy/gu50tbna/4/
+ACTUALIZACIÓN: este es el link final, después de las 12 (específicamente 12:41 a.m.), pero que espero sea calificado :)
+https://jsfiddle.net/MightopitaGuy/gu50tbna/5/
+
+## Lógica
+
+La forma en que funciona el programa es que se cargan los datos desde el link generado por Github para el archivo de caminar. Luego, se organizó este archivo en un arreglo, en que cada 67 posiciones se representaba una fila de la matriz. Como eventualmente me di cuenta de que cada 3 columnas era un punto X-Y-Z, pinté todos los punticos en cada momento de tiempo con un único objeto Person que trasladaba de un lado a otro.
+
+Si se quiere modificar la cantidad de tiempo a mostrar de la animación, se debe modificar la variable "tiempo_máximo", que en este momento por defecto está puesta en 200.
 
 ## Resultado
 <img width="443" alt="image" src="https://user-images.githubusercontent.com/26715082/190842222-25fb165b-6ae8-4b38-933f-767c22df5685.png">
