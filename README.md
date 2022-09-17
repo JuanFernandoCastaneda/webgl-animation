@@ -1,13 +1,13 @@
 # webgl-animation
 
-Hola profesor (o monitore), buen día.
+Hola profesor o monitor, buen día.
 
 El método de envío que elegí para este proyecto fue dictado por la falta de tiempo que tenía para realizarlo antes de la fecha límite. Enviar un link de Github me permitía modificarlo incluso después de entregado. Espero que esto no sea un inconveniente muy grande :)
 
 De todas maneras, aquí encuentra el Fiddle más actualizado del proyecto para su despliegue real (antes de las 12) 
 https://jsfiddle.net/MightopitaGuy/gu50tbna/1/ 
 
-ACTUALIZACIÓN: este es el link final, después de las 12 (específicamente 12:41 a.m.), pero que espero sea calificado :)
+ACTUALIZACIÓN: este es el link final, entregado después de las 12 (específicamente 12:41 a.m.), pero que espero sea el calificado :)
 https://jsfiddle.net/MightopitaGuy/gu50tbna/5/
 
 ## Lógica
